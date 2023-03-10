@@ -8,11 +8,28 @@ NS_ASSUME_NONNULL_BEGIN
 @interface
 SentryHub (Private)
 
+@property (nonatomic, strong)
+    NSMutableArray<NSObject<SentryIntegrationProtocol> *> *installedIntegrations;
+@property (nonatomic, strong) NSMutableArray<NSString *> *installedIntegrationNames;
+
+- (SentryClient *_Nullable)client;
+
 - (void)captureCrashEvent:(SentryEvent *)event;
+
+- (void)captureCrashEvent:(SentryEvent *)event withScope:(SentryScope *)scope;
 
 - (void)setSampleRandomValue:(NSNumber *)value;
 
 - (void)closeCachedSessionWithTimestamp:(NSDate *_Nullable)timestamp;
+
+- (id<SentrySpan>)startTransactionWithName:(NSString *)name
+                                nameSource:(SentryTransactionNameSource)source
+                                 operation:(NSString *)operation;
+
+- (id<SentrySpan>)startTransactionWithName:(NSString *)name
+                                nameSource:(SentryTransactionNameSource)source
+                                 operation:(NSString *)operation
+                               bindToScope:(BOOL)bindToScope;
 
 - (id<SentrySpan>)startTransactionWithContext:(SentryTransactionContext *)transactionContext
                                   bindToScope:(BOOL)bindToScope

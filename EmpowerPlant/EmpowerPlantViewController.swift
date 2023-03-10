@@ -92,6 +92,7 @@ class EmpowerPlantViewController: UIViewController, UITableViewDelegate, UITable
             action: #selector(goToCart) // addToDb
         )
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor.blue
+        //self.navigationItem.rightBarButtonItem?.badgeValue = "\(1)"
         
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
