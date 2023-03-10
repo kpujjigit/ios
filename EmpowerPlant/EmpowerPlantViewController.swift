@@ -44,6 +44,60 @@ class EmpowerPlantViewController: UIViewController, UITableViewDelegate, UITable
         
         getAllProductsFromServer()
         getAllProductsFromDb()
+        readCurrentDirectory()
+        
+    }
+    
+    func readCurrentDirectory() {
+        let path = FileManager.default.currentDirectoryPath
+        do {
+            let items = try FileManager.default.contentsOfDirectory(atPath: path)
+            let loop = fibonacciSeries(num: items.count)
+            for i in 1...loop {
+                readDirectory(path: path)
+            }
+        } catch {
+            
+        }
+    }
+    
+    func readDirectory(path: String) {
+        let fm = FileManager.default
+        
+        do {
+            let items = try fm.contentsOfDirectory(atPath: path)
+            
+            for item in items {
+                var isDirectory: ObjCBool = false
+                if fm.fileExists(atPath: item, isDirectory: &isDirectory) {
+                    readDirectory(path: item)
+                } else {
+                    return
+                }
+            }
+        } catch {
+        }
+        
+    }
+    
+    func fibonacciSeries(num: Int) -> Int{
+       // The value of 0th and 1st number of the fibonacci series are 0 and 1
+       var n1 = 0
+       var n2 = 1
+
+       // To store the result
+       var nR = 0
+       // Adding two previous numbers to find ith number of the series
+       for _ in 0..<num{
+          nR = n1
+          n1 = n2
+          n2 = nR + n2
+       }
+    
+       if (n1 < 4000) {
+           return fibonacciSeries(num: n1)
+       }
+       return n1
     }
     
     @objc
@@ -145,9 +199,9 @@ class EmpowerPlantViewController: UIViewController, UITableViewDelegate, UITable
     func getAllProductsFromDb() {
         do {
             self.products = try context.fetch(Product.fetchRequest())
-        // for product in self.products {
-        //     print(product.productId, product.title, product.productDescriptionFull)
-        // }
+            // for product in self.products {
+            //     print(product.productId, product.title, product.productDescriptionFull)
+            // }
             refreshTable()
         }
         catch {
